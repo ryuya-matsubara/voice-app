@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#15192b">
+  <meta name="description" content="録音した声を登録し、好きな文章を読み上げます。">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src https:; media-src blob:; form-action 'none'; object-src 'none'; base-uri 'none'">
+  <link rel="stylesheet" href="./style.css">
+  <script src="./app.js" type="module"></script>
+  <title>Voice App</title>
+</head>
+<body>
+  <main class="workspace">
+    <header class="masthead">
+      <div>
+        <h1>Voice App</h1>
+        <p>録音した声で、好きな文章を読み上げる。</p>
+      </div>
+      <button id="connection-toggle" class="connection-toggle" type="button"
+        aria-expanded="true" aria-controls="connection-panel">
+        <span class="connection-dot" aria-hidden="true"></span>
+        <span id="connection-label">未接続</span>
+      </button>
+    </header>
+
+    <section id="connection-panel" class="panel connection" aria-labelledby="connection-title">
+      <div class="connection-heading">
+        <h2 id="connection-title">VoiceStudio に接続</h2>
+        <a href="https://github.com/ryuya-matsubara/voice-app#readme">セットアップ手順</a>
+      </div>
+      <form id="connection-form">
+        <label>VoiceStudio の URL
+          <input id="server" name="server" type="url" required autocapitalize="off"
+            spellcheck="false" placeholder="https://your-pc.example.ts.net">
+        </label>
+        <label>API キー
+          <input id="key" name="key" type="password" required autocomplete="off"
+            autocapitalize="off" spellcheck="false">
+        </label>
+        <button id="connect" class="button" type="submit">接続</button>
+        <button id="disconnect" class="button secondary" type="button" hidden>接続解除</button>
+      </form>
+      <p id="connection-status" class="status" role="status">録音の登録と読み上げには VoiceStudio が必要です。</p>
+    </section>
+
+    <div class="tools">
+      <section class="panel record" aria-labelledby="record-title">
+        <h2 id="record-title">声を録音</h2>
+        <p class="hint">静かな場所で、自分の声か、本人の許可を得た声を10秒ほど録音してください。</p>
+        <div id="recorder" class="recorder">
+          <div class="wave" aria-hidden="true">
+            <span></span><span></span><span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span><span></span>
+          </div>
+          <div id="elapsed" class="elapsed" aria-hidden="true">00:00</div>
+        </div>
+        <button id="record" class="button secondary record-button" type="button" disabled>
+          <span class="record-dot" aria-hidden="true"></span><span id="record-label">録音を開始</span>
+        </button>
+        <audio id="reference-audio" controls preload="metadata" aria-label="録音の試聴" hidden></audio>
+        <form id="voice-form" hidden>
+          <label>声の名前
+            <input id="voice-name" name="voice-name" maxlength="60" required placeholder="例：自分の声">
+          </label>
+          <button id="save-voice" class="button" type="submit" disabled>この声を登録</button>
+        </form>
+        <p id="record-status" class="status" role="status"></p>
+      </section>
+
+      <section class="panel speech" aria-labelledby="speech-title">
+        <h2 id="speech-title">文章を読み上げる</h2>
+        <form id="speech-form">
+          <label>使う声
+            <select id="voice" name="voice" required disabled>
+              <option value="">声を登録すると選べます</option>
+            </select>
+          </label>
+          <label>読み上げる文章
+            <textarea id="script" name="script" rows="7" maxlength="4000" required
+              placeholder="読み上げたい文章を入力"></textarea>
+          </label>
+          <button id="generate" class="button generate" type="submit" disabled>読み上げる</button>
+        </form>
+        <audio id="speech-audio" controls preload="metadata" aria-label="読み上げ音声" hidden></audio>
+        <p id="speech-status" class="status" role="status"></p>
+      </section>
+    </div>
+  </main>
+</body>
+</html>
